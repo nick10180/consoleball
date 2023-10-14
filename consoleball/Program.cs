@@ -19,7 +19,7 @@ string stempn = Console.ReadLine();
 
 int itempn = int.Parse(stempn);
 
-Mathmodule myMath = new Mathmodule();
+cMathmodule myMath = new cMathmodule();
 /*
 int dtempa = int.Parse(tempa);
 
@@ -31,7 +31,7 @@ double dtempc = double.Parse(tempc);
 //myMath.printTrajectoryOverTime(dtempa, .1, dtempb, dtempc);
 Console.WriteLine(myMath.fibonacci(itempn));
 
-class Mathmodule
+class cMathmodule
 {
 
 
