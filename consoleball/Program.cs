@@ -31,11 +31,32 @@ double dtempc = double.Parse(tempc);
 //myMath.printTrajectoryOverTime(dtempa, .1, dtempb, dtempc);
 Console.WriteLine(myMath.fibonacci(itempn));
 
+Console.WriteLine(myMath.fibonacci(itempn, false));
+
 class cMathmodule
 {
 
 
+    public double convertToRadians(double angle)
+    {
+        return (Math.PI / 180) * angle;
+    }
+    
+    public UInt128 fibonacci(int n, bool flag = true)
+    {
+     Stopwatch myStopWatch = new Stopwatch();
 
+     cFibonacci myFib = new cFibonacci();
+          myStopWatch.Start();
+    UInt128 myans = myFib.Fibonacci(n, flag);
+     myStopWatch.Stop();
+     Console.WriteLine($"Elapsed Ticks: {myStopWatch.ElapsedTicks}");
+        return myans;
+    }
+
+}
+
+class cTrajectoryNoDrag : cMathmodule{
 
     private double calculateVx(double angle, double velocity)
     {
@@ -50,11 +71,6 @@ class cMathmodule
     private double calculateVy0(double angle, double velocity)
     {
         return velocity * Double.Sin(angle);
-    }
-
-    public double convertToRadians(double angle)
-    {
-        return (Math.PI / 180) * angle;
     }
 
     public void printTrajectoryOverTime(int duration, double timeinterval, double angle, double velocity)
@@ -74,40 +90,38 @@ class cMathmodule
                 break;
             }
 
-
         }
-    }
-    public UInt128 fibonacci(int n)
-    {
-     Stopwatch myStopWatch = new Stopwatch();
-     myStopWatch.Start();
-     cFibonacci myFib = new cFibonacci();
-     myStopWatch.Stop();
-     Console.WriteLine($"Elapsed Ticks: {myStopWatch.ElapsedTicks}");
-        return myFib.Fibonacci(n);
     }
 
 }
-class cFibonacci{
+class cFibonacci : cMathmodule{
     private Dictionary<int, UInt128> _fibomemo = new Dictionary<int, UInt128>();
 
 
-    public UInt128 Fibonacci(int n)
+    public UInt128 Fibonacci(int n, bool useMemo)
     {
         
         if (n <= 1)
         {
             return (UInt128)n;
         }
-        if (!this._fibomemo.ContainsKey(n))
+        if (this._fibomemo.ContainsKey(n) && useMemo)
         { 
-            UInt128 answer = Fibonacci(n - 1) + Fibonacci(n - 2);
+          return this._fibomemo[n];
+        }
+        else if (useMemo)
+        {
+             
+            UInt128 answer = Fibonacci(n - 1, useMemo) + Fibonacci(n - 2, useMemo);
             _fibomemo.Add(n, answer);
             return (answer);
+
         }
         else
         {
-            return this._fibomemo[n];
+
+            UInt128 answer = Fibonacci(n - 1, useMemo) + Fibonacci(n - 2, useMemo);
+            return answer;
         }
     }
         
